@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MiniCodeArena</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div id="listView">
+
+    <header class="navbar">
+        <div class="logo">MiniCodeArena</div>
+         <a href="/contests">Contests</a>
+    
+        <a href="/about">About</a>
+        <a href="/interview">Interview Prep</a>
+
+        <div class="filters">
+            <button onclick="filterProblems('All')">All</button>
+            <button onclick="filterProblems('Easy')">Easy</button>
+            <button onclick="filterProblems('Medium')">Medium</button>
+            <button onclick="filterProblems('Hard')">Hard</button>
+        </div>
+    </header>
+
+    <div class="problem-table" id="problemTable"></div>
+</div>
+
+<div id="solverView" class="hidden">
+
+    <header class="navbar">
+        <button class="back-btn" onclick="goBack()">← Problems</button>
+
+        <select id="languageSelect">
+            <option value="python">Python</option>
+        </select>
+
+        <button class="run-btn" onclick="runCode()">▶ Run</button>
+        <button class="run-btn" onclick="submitCode()">✓ Submit</button>
+    </header>
+
+    <div class="solver-layout">
+
+        <div class="description">
+            <h2 id="problemTitle"></h2>
+            <p id="problemDesc"></p>
+            <h4>Sample</h4>
+            <pre id="testcases"></pre>
+        </div>
+
+        <div class="editor">
+            <textarea id="editor"></textarea>
+        </div>
+    </div>
+
+    <div class="custom-input">
+        <h4>Custom Input</h4>
+        <textarea id="customInput" placeholder="Enter input here..."></textarea>
+    </div>
+
+    <div class="terminal">
+        <pre>Run code to see output</pre>
+    </div>
+</div>
+
+<script>
+
+let currentProblemId = null;
+
+
+const problems = [
+
+{ id:1, title:"Two Sum", difficulty:"Easy", description:"Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.", testcases:"Input: nums=[2,7,11,15], target=9\nOutput: [0,1]" },
+{ id:2, title:"Reverse String", difficulty:"Easy", description:"Write a function that reverses a string.", testcases:"Input: 'hello'\nOutput: 'olleh'" },
+{ id:3, title:"Palindrome Number", difficulty:"Easy", description:"Return true if an integer is a palindrome.", testcases:"Input: 121\nOutput: true" },
+{ id:4, title:"Valid Parentheses", difficulty:"Easy", description:"Check if parentheses are valid.", testcases:"Input: ()[]{}\nOutput: true" },
+{ id:5, title:"Merge Two Sorted Lists", difficulty:"Easy", description:"Merge two sorted linked lists.", testcases:"Input: [1,2,4], [1,3,4]\nOutput: [1,1,2,3,4,4]" },
+{ id:6, title:"Remove Duplicates from Sorted Array", difficulty:"Easy", description:"Remove duplicates in-place from a sorted array.", testcases:"Input: [1,1,2]\nOutput: [1,2]" },
+{ id:7, title:"Best Time to Buy and Sell Stock", difficulty:"Easy", description:"Find max profit from stock prices.", testcases:"Input: [7,1,5,3,6,4]\nOutput: 5" },
+{ id:8, title:"Single Number", difficulty:"Easy", description:"Find the element that appears only once.", testcases:"Input: [4,1,2,1,2]\nOutput: 4" },
+{ id:9, title:"Climbing Stairs", difficulty:"Easy", description:"Count distinct ways to climb stairs.", testcases:"Input: n=3\nOutput: 3" },
+{ id:10, title:"Maximum Subarray", difficulty:"Easy", description:"Find contiguous subarray with largest sum.", testcases:"Input: [-2,1,-3,4,-1,2,1]\nOutput: 6" },
+{ id:11, title:"Binary Search", difficulty:"Easy", description:"Implement binary search.", testcases:"Input: [-1,0,3,5,9], target=9\nOutput: 4" },
+{ id:12, title:"Move Zeroes", difficulty:"Easy", description:"Move all zeros to end.", testcases:"Input: [0,1,0,3,12]\nOutput: [1,3,12,0,0]" },
+{ id:13, title:"Invert Binary Tree", difficulty:"Easy", description:"Invert a binary tree.", testcases:"Input: [4,2,7,1,3]\nOutput: [4,7,2,3,1]" },
+{ id:14, title:"Valid Anagram", difficulty:"Easy", description:"Check if two strings are anagrams.", testcases:"Input: 'anagram','nagaram'\nOutput: true" },
+{ id:15, title:"Contains Duplicate", difficulty:"Easy", description:"Check if array contains duplicates.", testcases:"Input: [1,2,3,1]\nOutput: true" },
+{ id:16, title:"Intersection of Two Arrays", difficulty:"Easy", description:"Find intersection of two arrays.", testcases:"Input: [1,2,2,1],[2,2]\nOutput: [2]" },
+{ id:17, title:"Linked List Cycle", difficulty:"Easy", description:"Detect cycle in linked list.", testcases:"Input: head=[3,2,0,-4]\nOutput: true" },
+{ id:18, title:"First Bad Version", difficulty:"Easy", description:"Find first bad version.", testcases:"Input: n=5\nOutput: 4" },
+{ id:19, title:"Majority Element", difficulty:"Easy", description:"Find majority element.", testcases:"Input: [3,2,3]\nOutput: 3" },
+{ id:20, title:"Excel Sheet Column Number", difficulty:"Easy", description:"Convert Excel column to number.", testcases:"Input: 'AB'\nOutput: 28" },
+
+/* MEDIUM 21–35 */
+{ id:21, title:"Longest Substring Without Repeating Characters", difficulty:"Medium", description:"Find length of longest substring without repeating characters.", testcases:"Input: 'abcabcbb'\nOutput: 3" },
+{ id:22, title:"3Sum", difficulty:"Medium", description:"Find triplets that sum to zero.", testcases:"Input: [-1,0,1,2,-1,-4]\nOutput: [[-1,-1,2],[-1,0,1]]" },
+{ id:23, title:"Container With Most Water", difficulty:"Medium", description:"Find max water container.", testcases:"Input: [1,8,6,2,5,4,8,3,7]\nOutput: 49" },
+{ id:24, title:"Longest Palindromic Substring", difficulty:"Medium", description:"Find longest palindromic substring.", testcases:"Input: 'babad'\nOutput: 'bab'" },
+{ id:25, title:"Group Anagrams", difficulty:"Medium", description:"Group anagrams together.", testcases:"Input: ['eat','tea','tan','ate','nat','bat']" },
+{ id:26, title:"Search in Rotated Sorted Array", difficulty:"Medium", description:"Search target in rotated array.", testcases:"Input: [4,5,6,7,0,1,2], target=0\nOutput: 4" },
+{ id:27, title:"Merge Intervals", difficulty:"Medium", description:"Merge overlapping intervals.", testcases:"Input: [[1,3],[2,6],[8,10]]\nOutput: [[1,6],[8,10]]" },
+{ id:28, title:"Jump Game", difficulty:"Medium", description:"Check if end can be reached.", testcases:"Input: [2,3,1,1,4]\nOutput: true" },
+{ id:29, title:"Add Two Numbers", difficulty:"Medium", description:"Add numbers represented by linked lists.", testcases:"Input: [2,4,3],[5,6,4]\nOutput: [7,0,8]" },
+{ id:30, title:"Word Search", difficulty:"Medium", description:"Search word in grid.", testcases:"Input: board, word='ABCCED'\nOutput: true" },
+{ id:31, title:"Decode Ways", difficulty:"Medium", description:"Count decoding ways.", testcases:"Input: '226'\nOutput: 3" },
+{ id:32, title:"Kth Largest Element", difficulty:"Medium", description:"Find kth largest element.", testcases:"Input: [3,2,1,5,6,4], k=2\nOutput: 5" },
+{ id:33, title:"Coin Change", difficulty:"Medium", description:"Minimum coins for amount.", testcases:"Input: coins=[1,2,5], amount=11\nOutput: 3" },
+{ id:34, title:"Binary Tree Level Order Traversal", difficulty:"Medium", description:"Return level order traversal.", testcases:"Input: [3,9,20,null,null,15,7]" },
+{ id:35, title:"Longest Increasing Subsequence", difficulty:"Medium", description:"Find LIS length.", testcases:"Input: [10,9,2,5,3,7,101,18]\nOutput: 4" },
+
+{ id:36, title:"Median of Two Sorted Arrays", difficulty:"Hard", description:"Find median in log time.", testcases:"Input: [1,3],[2]\nOutput: 2.0" },
+{ id:37, title:"Trapping Rain Water", difficulty:"Hard", description:"Calculate trapped rainwater.", testcases:"Input: [0,1,0,2,1,0,1,3]\nOutput: 6" },
+{ id:38, title:"Regular Expression Matching", difficulty:"Hard", description:"Regex matching with '.' and '*'.", testcases:"Input: s='aab', p='c*a*b'\nOutput: true" },
+{ id:39, title:"Word Ladder", difficulty:"Hard", description:"Shortest transformation sequence.", testcases:"Input: hit → cog\nOutput: 5" },
+{ id:40, title:"Merge K Sorted Lists", difficulty:"Hard", description:"Merge k sorted linked lists.", testcases:"Input: lists=[[1,4,5],[1,3,4],[2,6]]" },
+{ id:41, title:"LFU Cache", difficulty:"Hard", description:"Design LFU cache.", testcases:"Operations based" },
+{ id:42, title:"Burst Balloons", difficulty:"Hard", description:"Max coins after bursting balloons.", testcases:"Input: [3,1,5,8]\nOutput: 167" },
+{ id:43, title:"Edit Distance", difficulty:"Hard", description:"Minimum operations to convert string.", testcases:"Input: 'horse','ros'\nOutput: 3" },
+{ id:44, title:"Serialize and Deserialize Binary Tree", difficulty:"Hard", description:"Serialize and deserialize tree.", testcases:"Tree input" },
+{ id:45, title:"Sliding Window Maximum", difficulty:"Hard", description:"Find max in sliding window.", testcases:"Input: [1,3,-1,-3,5], k=3\nOutput: [3,3,5]" },
+{ id:46, title:"Minimum Window Substring", difficulty:"Hard", description:"Find minimum window substring.", testcases:"Input: s='ADOBECODEBANC', t='ABC'\nOutput: 'BANC'" },
+{ id:47, title:"N-Queens", difficulty:"Hard", description:"Return all N-Queens solutions.", testcases:"Input: n=4\nOutput: 2" },
+{ id:48, title:"Sudoku Solver", difficulty:"Hard", description:"Solve Sudoku.", testcases:"Board input" },
+{ id:49, title:"Alien Dictionary", difficulty:"Hard", description:"Determine alien language order.", testcases:"Words input" },
+{ id:50, title:"Longest Valid Parentheses", difficulty:"Hard", description:"Find longest valid parentheses substring.", testcases:"Input: '(()'\nOutput: 2" }
+
+];
+
+
+const table = document.getElementById("problemTable");
+const listView = document.getElementById("listView");
+const solverView = document.getElementById("solverView");
+
+function renderProblems(list) {
+    table.innerHTML = "";
+    list.forEach(p => {
+        table.innerHTML += `
+            <div class="problem-row" onclick="openProblem(${p.id})">
+                <span>#${p.id} ${p.title}</span>
+                <span class="${p.difficulty.toLowerCase()}">${p.difficulty}</span>
+            </div>`;
+    });
+}
+renderProblems(problems);
+
+function filterProblems(level) {
+    if (level === "All") renderProblems(problems);
+    else renderProblems(problems.filter(p => p.difficulty === level));
+}
+
+function openProblem(id) {
+    currentProblemId = id;
+    const p = problems.find(x => x.id === id);
+
+    listView.style.display = "none";
+    solverView.style.display = "block";
+
+    document.getElementById("problemTitle").innerText = `#${p.id} ${p.title}`;
+    document.getElementById("problemDesc").innerText = p.description;
+    document.getElementById("testcases").innerText = p.testcases;
+
+    document.getElementById("editor").value = "def solve():\n    pass";
+}
+
+function goBack() {
+    solverView.style.display = "none";
+    listView.style.display = "block";
+}
+
+
+function runCode() {
+    const terminal = document.querySelector(".terminal pre");
+
+    fetch("/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            code: document.getElementById("editor").value,
+            custom_input: document.getElementById("customInput").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        terminal.innerText = data.output || JSON.stringify(data, null, 2);
+    });
+}
+
+const contestId = new URLSearchParams(window.location.search).get("contest_id");
+
+function submitCode() {
+  fetch(contestId ? "/contest/submit" : "/submit", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      contest_id: contestId,
+      problem_id: currentProblemId,
+      code: editor.getValue()
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  });
+}
+
+</script>
+</body>
+</html>

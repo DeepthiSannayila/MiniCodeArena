@@ -1,0 +1,202 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: white;
+  opacity: 0.85;
+}
+
+.nav-links a.active {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+/* Hero */
+.contest-hero {
+  text-align: center;
+  margin: 40px 0 20px;
+}
+
+.contest-hero h1 {
+  font-size: 38px;
+}
+
+.contest-hero p {
+  opacity: 0.7;
+}
+
+/* Grid */
+.contest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  padding: 40px;
+}
+
+/* Card */
+.contest-card {
+  border-radius: 16px;
+  padding: 18px;
+  position: relative;
+  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contest-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 0 40px rgba(255,255,255,0.15);
+}
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #020617;
+  padding: 24px 30px;
+  border-radius: 14px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(34,197,94,0.3);
+}
+
+.modal-content h3 {
+  margin-bottom: 14px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 14px;
+  outline: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-actions button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-actions button.cancel {
+  background: #475569;
+  color: white;
+}
+
+.modal-actions button:not(.cancel) {
+  background: #22c55e;
+  color: black;
+}
+
+/* Top bar */
+.contest-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.upcoming { background: #2563eb; }
+.status.live { background: #22c55e; color: black; }
+.status.ended { background: #64748b; }
+
+.timer {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.live-blink {
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+/* Button */
+.enter-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: white;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.enter-btn:hover {
+  background: #e5e7eb;
+}
+
+.enter-btn.disabled {
+  background: #475569;
+  color: #cbd5e1;
+  pointer-events: none;
+}
+
+/* Themes */
+.theme-orange { background: linear-gradient(135deg, #fb923c, #f97316); }
+.theme-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+.theme-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.theme-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.theme-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.theme-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+.theme-pink { background: linear-gradient(135deg, #ec4899, #db2777); }
+.theme-yellow { background: linear-gradient(135deg, #facc15, #eab308); color: black; }
+.theme-indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.theme-cyan { background: linear-gradient(135deg, #22d3ee, #06b6d4); }
+.solve-btn.solved {
+  background: #22c55e;
+  color: black;
+  pointer-events: none;
+}

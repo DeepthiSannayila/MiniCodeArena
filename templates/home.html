@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MiniCodeArena</title>
+<link rel="stylesheet" href="/static/home.css">
+</head>
+<body>
+
+
+<header class="navbar">
+    <div class="logo">MiniCodeArena</div>
+    <nav class="nav-links">
+        <a href="/contests">Contests</a>
+        <a href="/problems">Problems</a>
+        <a href="/about">About</a>
+        <a href="/interview">Interview Prep</a>
+
+        {% if session.get("user_name") %}
+    <span>Welcome, {{ session["user_name"] }}</span>
+    <a href="/logout">Logout</a>
+{% else %}
+    <a href="/login">Login</a>
+{% endif %}
+
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-left">
+        <div class="mock-card">
+            <div class="color-box blue"></div>
+            <div class="color-box green"></div>
+            <div class="color-box yellow"></div>
+            <div class="color-box red"></div>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <h1>A New Way to Learn</h1>
+        <p>
+            MiniCodeArena helps you practice coding problems,
+            improve algorithmic thinking, and prepare for interviews.
+        </p>
+        <a href="/register" class="cta-btn">Create Account</a>
+
+</section>
+
+</body>
+</html>

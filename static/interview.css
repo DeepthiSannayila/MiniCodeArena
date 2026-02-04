@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: white;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(0,0,0,0.6);
+}
+
+.nav-links a {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links a.active {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.hero {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    padding: 40px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: white;
+    color: black;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.dsa { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+.python { background: linear-gradient(135deg, #22c55e, #15803d); }
+.java { background: linear-gradient(135deg, #f97316, #c2410c); }
+
+.videos {
+    padding: 40px;
+}
+
+.videos ul {
+    list-style: none;
+    padding: 0;
+}
+
+.videos li {
+    margin: 10px 0;
+}
+
+.videos a {
+    color: #38bdf8;
+    text-decoration: none;
+}

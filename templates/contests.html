@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contests | MiniCodeArena</title>
+  <link rel="stylesheet" href="/static/contests.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">MiniCodeArena</div>
+  <nav class="nav-links">
+    <a href="/problems">Problems</a>
+    <a href="/contests" class="active">Contests</a>
+    <a href="/about">About</a>
+  </nav>
+</header>
+
+<section class="contest-hero">
+  <h1>MiniCodeArena Contests</h1>
+  <p>Compete. Learn. Rank up. Become elite.</p>
+</section>
+
+<section class="contest-grid">
+
+  <!-- Contest Card 1 -->
+  <div class="contest-card theme-orange">
+    <div class="contest-top">
+      <span class="status upcoming">Upcoming</span>
+      <span class="timer">Starts in 2d 5h</span>
+    </div>
+    <h3>Weekly Contest #101</h3>
+    <p>Sun, Feb 02 • 08:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(101, 'register')">Register</button>
+  </div>
+
+  <!-- Contest Card 2 -->
+  <div class="contest-card theme-purple">
+    <div class="contest-top">
+      <span class="status live">Live</span>
+      <span class="timer live-blink">Ends in 1h 14m</span>
+    </div>
+    <h3>Biweekly Contest #52</h3>
+    <p>Sat, Jan 25 • 20:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(102, 'join')">Join Now</button>
+  </div>
+
+  <!-- Contest Card 3 -->
+  <div class="contest-card theme-green">
+    <div class="contest-top">
+      <span class="status ended">Ended</span>
+      <span class="timer">Finished</span>
+    </div>
+    <h3>Beginner Contest #12</h3>
+    <p>Wed, Jan 22 • 18:00 IST</p>
+    <button class="enter-btn disabled">View</button>
+  </div>
+
+  <!-- Contest Card 4 -->
+  <div class="contest-card theme-blue">
+    <div class="contest-top">
+      <span class="status upcoming">Upcoming</span>
+      <span class="timer">Starts in 5d 2h</span>
+    </div>
+    <h3>Algorithm Sprint #7</h3>
+    <p>Thu, Feb 06 • 19:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(104, 'register')">Register</button>
+  </div>
+
+  <!-- Contest Card 5 -->
+  <div class="contest-card theme-red">
+    <div class="contest-top">
+      <span class="status live">Live</span>
+      <span class="timer live-blink">Ends in 34m</span>
+    </div>
+    <h3>DSA Marathon #3</h3>
+    <p>Sun, Jan 19 • 10:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(105, 'join')">Join Now</button>
+  </div>
+
+  <!-- Contest Card 6 -->
+  <div class="contest-card theme-teal">
+    <div class="contest-top">
+      <span class="status upcoming">Upcoming</span>
+      <span class="timer">Starts in 10d</span>
+    </div>
+    <h3>Interview Prep Contest</h3>
+    <p>Mon, Feb 12 • 09:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(106, 'register')">Register</button>
+  </div>
+
+  <!-- Contest Card 7 -->
+  <div class="contest-card theme-pink">
+    <div class="contest-top">
+      <span class="status upcoming">Upcoming</span>
+      <span class="timer">Starts in 3d 4h</span>
+    </div>
+    <h3>Women Coders Cup</h3>
+    <p>Fri, Jan 26 • 17:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(107, 'register')">Register</button>
+  </div>
+
+  <!-- Contest Card 8 -->
+  <div class="contest-card theme-yellow">
+    <div class="contest-top">
+      <span class="status ended">Ended</span>
+      <span class="timer">Finished</span>
+    </div>
+    <h3>Code Rush #19</h3>
+    <p>Sat, Jan 18 • 21:00 IST</p>
+    <button class="enter-btn disabled">View</button>
+  </div>
+
+  <!-- Contest Card 9 -->
+  <div class="contest-card theme-indigo">
+    <div class="contest-top">
+      <span class="status live">Live</span>
+      <span class="timer live-blink">Ends in 2h 45m</span>
+    </div>
+    <h3>System Design Round</h3>
+    <p>Sun, Jan 19 • 12:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(109, 'join')">Join Now</button>
+  </div>
+
+  <!-- Contest Card 10 -->
+  <div class="contest-card theme-cyan">
+    <div class="contest-top">
+      <span class="status upcoming">Upcoming</span>
+      <span class="timer">Starts in 7d</span>
+    </div>
+    <h3>AI Coding Challenge</h3>
+    <p>Tue, Feb 04 • 11:00 IST</p>
+    <button class="enter-btn" onclick="openRegister(110, 'register')">Register</button>
+  </div>
+
+</section>
+
+<!-- ================= Registration Modal ================= -->
+<div id="registerModal" class="modal hidden">
+  <div class="modal-content">
+    <h3 id="modalTitle">Enter Contest</h3>
+    <input type="text" id="userNameInput" placeholder="Enter your name">
+    <div class="modal-actions">
+      <button onclick="submitRegistration()">Continue</button>
+      <button class="cancel" onclick="closeRegister()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedContestId = null;
+let actionType = null;  // "register" or "join"
+
+function openRegister(contestId, type) {
+  selectedContestId = contestId;
+  actionType = type;
+
+  document.getElementById("modalTitle").innerText =
+    type === "join" ? "Join Contest" : "Register for Contest";
+
+  document.getElementById("registerModal").classList.remove("hidden");
+}
+
+function closeRegister() {
+  document.getElementById("registerModal").classList.add("hidden");
+  document.getElementById("userNameInput").value = "";
+}
+
+async function submitRegistration() {
+  const name = document.getElementById("userNameInput").value.trim();
+
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
+
+  const res = await fetch("/contest/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contest_id: selectedContestId,
+      user_name: name
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.status === "success") {
+
+    if (actionType === "register") {
+      alert("🎉 Registered Successfully!");
+      closeRegister();  // Stay on contests page
+    }
+
+    if (actionType === "join") {
+      window.location.href = `/contest/${selectedContestId}`;  // Go to contest page
+    }
+
+  } else {
+    alert("Registration failed");
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contest | MiniCodeArena</title>
+  <link rel="stylesheet" href="/static/contests.css">
+  <style>
+    body {
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: white;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+    }
+
+    .container {
+      padding: 40px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .back-link {
+      color: #38bdf8;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .contest-header {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      margin-bottom: 30px;
+    }
+
+    .contest-header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .contest-meta {
+      opacity: 0.85;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+.solve-btn.solved {
+  background: #22c55e;
+  color: black;
+  pointer-events: none;
+}
+
+    .problem-list {
+      margin-top: 30px;
+    }
+
+    .problem-card {
+      background: rgba(255,255,255,0.06);
+      padding: 18px 20px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .problem-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .difficulty {
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: black;
+      margin-left: 10px;
+    }
+
+    .difficulty.Medium { background: #facc15; }
+    .difficulty.Hard { background: #ef4444; color: white; }
+
+    .solve-btn {
+      background: white;
+      color: black;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .solve-btn:hover {
+      background: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="/contests" class="back-link">← Back to Contests</a>
+
+  <div class="contest-header">
+    <h1 id="contest-title">Loading...</h1>
+    <div class="contest-meta" id="contest-meta">Loading contest details...</div>
+  </div>
+
+  <h2>Problems</h2>
+  <div class="problem-list" id="problem-list">
+    Loading problems...
+  </div>
+
+</div>
+
+<script>
+  const contestId = {{ contest_id }};
+  let solvedProblems = [];
+
+  // Load solved problems
+  fetch(`/api/contest/${contestId}/solved`)
+    .then(res => res.json())
+    .then(data => {
+      solvedProblems = data; // [5, 8, 9]
+      loadContestDetails();
+      loadContestProblems();
+    });
+
+  function loadContestDetails() {
+    fetch(`/api/contest/${contestId}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("contest-title").innerText = data.title;
+        document.getElementById("contest-meta").innerText =
+          `Start: ${data.start_time} | End: ${data.end_time}`;
+      });
+  }
+
+  function loadContestProblems() {
+    fetch(`/api/contest/${contestId}/problems`)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("problem-list");
+        container.innerHTML = "";
+
+        if (data.length === 0) {
+          container.innerHTML = "<p>No problems assigned to this contest yet.</p>";
+          return;
+        }
+
+        data.forEach(p => {
+          const isSolved = solvedProblems.includes(p.id);
+
+          const div = document.createElement("div");
+          div.className = "problem-card";
+
+          div.innerHTML = `
+            <div>
+              <span class="problem-title">${p.title}</span>
+              <span class="difficulty ${p.difficulty}">${p.difficulty}</span>
+            </div>
+
+            ${
+              isSolved
+                ? `<span class="solve-btn" style="background:#22c55e;color:black;">Solved ✓</span>`
+                : `<a class="solve-btn" href="/contest/${contestId}/problem/${p.id}">
+                     Solve
+                   </a>`
+            }
+          `;
+
+          container.appendChild(div);
+        });
+      });
+  }
+</script>
+
+</body>
+</html>

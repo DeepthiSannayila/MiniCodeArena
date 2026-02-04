@@ -1,0 +1,17 @@
+body {
+  background: #020617;
+  color: white;
+  font-family: Arial;
+}
+
+.contest-header {
+  padding: 20px;
+  text-align: center;
+}
+
+.problem-row {
+  padding: 12px 20px;
+  border-bottom: 1px solid #334155;
+  display: flex;
+  justify-content: space-between;
+}
